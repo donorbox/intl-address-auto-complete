@@ -35,37 +35,6 @@ $(document).ready(function() {
     }
   }).trigger('change');
 
-  // $('.intl-city').each(function(){
-  //   var cityField = $(this);
-
-  //   cityField.autocomplete({
-  //     source: function (request, response) {
-  //         jQuery.getJSON(
-  //             "http://gd.geobytes.com/AutoCompleteCity?callback=?&q=" + request.term,
-  //             function (data) {
-  //                 response(data);
-  //             }
-  //         );
-  //     },
-  //     minLength: 3,
-  //     select: function (event, ui) {
-  //         jQuery.getJSON(
-  //             "http://gd.geobytes.com/GetCityDetails?callback=?&fqcn=" + ui.item.value,
-  //             function (data) {
-  //               cityField.val(data.geobytescity);
-  //               cityField.parents('form').find('.intl-region-name').val(data.geobytesregion);
-  //               cityField.parents('form').find('.intl-country-name').val(data.geobytescountry);
-  //             }
-  //         );
-  //         return false;
-  //     },
-  //     focus: function() {
-  //         // prevent value inserted on focus
-  //         return false;
-  //     },
-  //   }).autocomplete("option", "delay", 100);
-  // });
-
   $('.intl-address1').each(function(){
     var input = this;
     var autocomplete = new google.maps.places.Autocomplete(this, { types: ['geocode'] });
@@ -73,19 +42,33 @@ $(document).ready(function() {
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
       var place = autocomplete.getPlace();
 
-      console.log(place);
       var city = $.grep(place.address_components, function(e){return e.types[0]=='locality'})[0];
       if(!city)
         city = $.grep(place.address_components, function(e){return e.types[0]=='administrative_area_level_2'})[0];
       var region = $.grep(place.address_components, function(e){return e.types[0]=='administrative_area_level_1'})[0];
       var country = $.grep(place.address_components, function(e){return e.types[0]=='country'})[0];
+      var postalCode = $.grep(place.address_components, function(e){return e.types[0]=='postal_code'})[0];
 
 
-      $(input).val('');
+      //$(input).val('');
       if(city)
         $(input).parents('form').find('.intl-city').val(city.long_name);
-      $(input).parents('form').find('.intl-region-name').val(region.long_name);
-      $(input).parents('form').find('.intl-country-name').val(country.long_name).trigger('change');
+      if(region)
+        $(input).parents('form').find('.intl-region-name').val(region.long_name);
+      if(country)
+        $(input).parents('form').find('.intl-country-name').val(country.long_name).trigger('change');
+      if(postalCode)
+        $(input).parents('form').find('.intl-zip-code, .intl-postal-code').val(postalCode.long_name);
+
+      var inpVals = [];
+      $(input).parents('form').find(".intl-city, .intl-region-name, .intl-country-name, .intl-zip-code, .intl-postal-code").each(function(){inpVals.push($(this).val());});
+
+      var remainingPlaceComponents = [];
+      $.each(place.address_components, function(index, addressComponent){
+        if(inpVals.indexOf(addressComponent.long_name) == -1)
+          remainingPlaceComponents.push(addressComponent.long_name);
+      });
+      $(input).val(remainingPlaceComponents.join(', '));
     });
   });
 });

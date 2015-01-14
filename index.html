@@ -2,13 +2,36 @@
 <html>
   <head>
     <title>jQuery International Address</title>
+
+    <style>
+      div:after {
+        clear: both;
+        content: "";
+        display: block;
+      }
+
+      label {
+        min-width: 150px;
+        float: left;
+      }
+
+      input[type=text], select {
+        width: 60%;
+        float: left;
+      }
+    </style>
   </head>
 
   <body>
     <form>
       <div>
-        <label for='address'>Address</label>
-        <input type='text' id='address' name='address' placeholder='address' class='intl-address1' />
+        <label for='address1'>Address 1</label>
+        <input type='text' id='address1' name='address1' placeholder='address' class='intl-address1' />
+      </div>
+
+      <div>
+        <label for='address2'>Address 2</label>
+        <input type='text' id='address2' name='address2' placeholder='Apt, Suite, Unit #' class='intl-address2' />
       </div>
 
       <div>
@@ -38,58 +61,5 @@
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js" type="text/javascript"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places" type="text/javascript"></script>
     <script src="/jquery.international-address.js"></script>
-
-    <script>
-
-      // autocomplete = new google.maps.places.Autocomplete(
-      //     /** @type {HTMLInputElement} */($('.intl-address1')[0]),
-      //     { types: ['geocode'] });
-      // // When the user selects an address from the dropdown,
-      // // populate the address fields in the form.
-      // google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      //   fillInAddress();
-      // });
-
-
-      // function fillInAddress() {
-      //   // Get the place details from the autocomplete object.
-      //   var place = autocomplete.getPlace();
-      //   console.log(place);
-
-      //   // for (var component in componentForm) {
-      //   //   document.getElementById(component).value = '';
-      //   //   document.getElementById(component).disabled = false;
-      //   // }
-
-      //   // // Get each component of the address from the place details
-      //   // // and fill the corresponding field on the form.
-      //   // for (var i = 0; i < place.address_components.length; i++) {
-      //   //   var addressType = place.address_components[i].types[0];
-      //   //   if (componentForm[addressType]) {
-      //   //     var val = place.address_components[i][componentForm[addressType]];
-      //   //     document.getElementById(addressType).value = val;
-      //   //   }
-      //   // }
-      //   var searchField = $("#address");
-      //   searchField.parents('form').find('.intl-city-name').val($.grep(place.address_components, function(e){return e.types[0]=='locality'})[0].long_name);
-      //   searchField.parents('form').find('.intl-region-name').val($.grep(place.address_components, function(e){return e.types[0]=='administrative_area_level_1'})[0].long_name);
-      //   searchField.parents('form').find('.intl-country-name').val($.grep(place.address_components, function(e){return e.types[0]=='country'})[0].long_name).trigger('change');
-      // }
-
-      // function geolocate() {
-      //   // if (navigator.geolocation) {
-      //   //   navigator.geolocation.getCurrentPosition(function(position) {
-      //   //     var geolocation = new google.maps.LatLng(
-      //   //         position.coords.latitude, position.coords.longitude);
-      //   //     var circle = new google.maps.Circle({
-      //   //       center: geolocation,
-      //   //       radius: position.coords.accuracy
-      //   //     });
-      //   //     autocomplete.setBounds(circle.getBounds());
-      //   //   });
-      //   // }
-      // }
-
-    </script>
   </body>
 </html>
