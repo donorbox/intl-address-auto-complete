@@ -42,6 +42,10 @@ $(document).ready(function() {
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
       var place = autocomplete.getPlace();
 
+      console.log(place);
+
+      var streetNumber = $.grep(place.address_components, function(e){return e.types[0]=='street_number'})[0];
+      var route = $.grep(place.address_components, function(e){return e.types[0]=='route'})[0];
       var city = $.grep(place.address_components, function(e){return e.types[0]=='locality'})[0];
       if(!city)
         city = $.grep(place.address_components, function(e){return e.types[0]=='administrative_area_level_2'})[0];
@@ -61,11 +65,17 @@ $(document).ready(function() {
         $(input).parents('form').find('*[data-intl="zip-code"], *[data-intl="postal-code"]').val(postalCode.long_name);
 
       var inpVals = [];
+      var streetNumberAndRoute = [];
+      if(streetNumber)
+        streetNumberAndRoute.push(streetNumber.long_name);
+      if(route)
+        streetNumberAndRoute.push(route.long_name);
       $(input).parents('form').find('*[data-intl="city"], *[data-intl="region-name"], *[data-intl="country-name"], *[data-intl="zip-code"], *[data-intl="postal-code"]').each(function(){inpVals.push($(this).val());});
 
       var remainingPlaceComponents = [];
+      remainingPlaceComponents.push(streetNumberAndRoute.join(' ')); // Street number and route to be considered as single unit
       $.each(place.address_components, function(index, addressComponent){
-        if(inpVals.indexOf(addressComponent.long_name) == -1 && addressComponent.types[0] != 'neighborhood' && addressComponent.types[0] != 'administrative_area_level_2')
+        if(inpVals.concat(streetNumberAndRoute).indexOf(addressComponent.long_name) == -1 && addressComponent.types[0] != 'neighborhood' && addressComponent.types[0] != 'administrative_area_level_2' && addressComponent.types[0] != 'postal_code_suffix')
           remainingPlaceComponents.push(addressComponent.long_name);
       });
       $(input).val(remainingPlaceComponents.join(', '));
