@@ -2,8 +2,13 @@
 <html>
   <head>
     <title>jQuery International Address</title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <style>
+      * {
+            box-sizing: border-box;
+      }
+
       div:after {
         clear: both;
         content: "";
@@ -13,12 +18,23 @@
       label {
         min-width: 150px;
         float: left;
+        padding: 5px 0;
       }
 
       input[type=text], select {
         width: 60%;
         float: left;
+        padding: 5px;
       }
+
+      @media screen and (max-width: 700px) {
+        input[type=text], select, label {
+          float: none;
+          width: 100%;
+          margin-bottom: 10px;
+        }
+      }
+
     </style>
   </head>
 
